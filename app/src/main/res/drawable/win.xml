@@ -1,0 +1,24 @@
+<!-- res/drawable/button_background.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Pressed state -->
+    <item android:state_pressed="true">
+        <shape>
+            <solid android:color="#308134" /> <!-- Change the color to your desired pressed color -->
+            <stroke
+                android:width="0dp"
+                android:color="#FFFFFF" /> <!-- White stroke around the button -->
+            <corners android:radius="10dp" /> <!-- Optional: Set corner radius -->
+        </shape>
+    </item>
+
+    <!-- Default state -->
+    <item>
+        <shape>
+            <solid android:color="@color/win" /> <!-- Change the color to your default color -->
+            <stroke
+                android:width="0dp"
+                android:color="#FFFFFF" /> <!-- White stroke around the button -->
+            <corners android:radius="10dp" /> <!-- Optional: Set corner radius -->
+        </shape>
+    </item>
+</selector>
