@@ -1,92 +1,157 @@
 <!-- res/layout/modal_form.xml -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:orientation="vertical"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/forceResetPanel"
         android:orientation="vertical">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                android:orientation="vertical"
+                android:padding="20dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Base unit" />
+
+                        <EditText
+                            android:id="@+id/txtBaseUnit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_style"
+                            android:numeric="decimal"
+                            android:textAlignment="center"
+                            android:textSize="30dp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_marginTop="20dp"
+                    android:text="Money Management List" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
                     android:orientation="vertical">
+
+                    <ListView
+                        android:id="@+id/listView"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" />
+
+                    <LinearLayout
+                        android:id="@+id/StopPanel"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_weight="2"
+                        android:layout_marginBottom="20dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_marginEnd="2dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Stop Loss"
+                                android:textAlignment="center" />
+
+                            <EditText
+                                android:id="@+id/txtStopLoss"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/edit_text_style"
+                                android:numeric="integer"
+                                android:textAlignment="center"
+                                android:textSize="30dp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_marginStart="2dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Stop Profit"
+                                android:textAlignment="center" />
+
+                            <EditText
+                                android:id="@+id/txtStopProfit"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/edit_text_style"
+                                android:numeric="integer"
+                                android:textAlignment="center"
+                                android:textSize="30dp" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/forceResetPanel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="vertical"
+                    android:paddingBottom="5dp">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Base unit" />
+                        android:layout_marginTop="10dp"
+                        android:text="Force Reset - All setting will set to default value"
+                        android:textAlignment="center" />
 
-                    <EditText
-                        android:id="@+id/txtBaseUnit"
+                    <androidx.appcompat.widget.AppCompatButton
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/edit_text_style"
-                        android:numeric="decimal"
-                        android:textAlignment="center"
-                        android:textSize="30dp" />
+                        android:onClick="forceReset_Clicked"
+                        android:text="Force Reset" />
+
                 </LinearLayout>
 
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Money Management List" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
-
-                <ListView
-                    android:id="@+id/listView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-
-        </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 
-    <LinearLayout
-        android:paddingStart="20dp"
-        android:paddingBottom="5dp"
-        android:id="@+id/forceResetPanel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Force Reset - All setting will set to default value" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="forceReset_Clicked"
-            android:text="Force Reset" />
-
-    </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>

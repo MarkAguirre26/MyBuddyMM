@@ -10,7 +10,7 @@
         android:background="@color/green_header"
         android:id="@+id/txtTitle"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="55dp"
         android:layout_alignParentTop="true"
         android:gravity="center"
         android:padding="5dp"
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Win%"
+                android:text="Unit"
                 android:textColor="@color/green"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -131,12 +131,12 @@
                 android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/txtWinPercentage"
+                android:id="@+id/txtUnit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="{winP}"
+                android:text="{unit}"
 
                 android:textSize="15sp" />
 
@@ -260,7 +260,7 @@
                 android:gravity="center"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="100.0"
+                android:text="{Amount}"
                 android:textColor="@color/white" />
 
 

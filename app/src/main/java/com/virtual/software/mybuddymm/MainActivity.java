@@ -33,6 +33,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
+    LinearLayout StopPanel;
     boolean isSound = true;
     private boolean isImage1 = true;
     AppCompatImageButton btnReset;
@@ -52,18 +53,23 @@ public class MainActivity extends AppCompatActivity {
     private static final String PROFIT = "Profit";
     private static final String WIN = "Win";
     private static final String LOSE = "Lose";
+    private static final String STOP_LOSS = "StopLoss";
+    private static final String STOP_PROFIT = "StopProfit";
 
     private int game = 0;
     private int round = 0;
     private String profit = "0";
     private int win = 0;
     private int lose = 0;
+    private int stopLoss = 0;
+    private int stopProfit = 0;
 
 
     LinearLayout winAndLossLinearLayout;
     List<Double> betsList;
     List<String> winLoseList;
-    TextView txtTitle, txtGame, txtRound, txtProfit, txtWinPercentage, txtWin, txtLose, txtNextBet, txtUnitOfBet, txtMessage;
+    TextView txtTitle, txtGame, txtRound, txtProfit, txtUnit, txtWin, txtLose, txtNextBet, txtUnitOfBet, txtMessage, txtStopLoss, txtStopProfit;
+    ;
     String selectedMM = "";
     double baseBetAmount;
     //---------ORC------------------------------------------------------------------
@@ -83,11 +89,12 @@ public class MainActivity extends AppCompatActivity {
         winAndLossResultHorizontalSccrollView = findViewById(R.id.winAndLossResultHorizontalSccrollView);
         handler = new Handler(Looper.getMainLooper());
 
+
         txtTitle = findViewById(R.id.txtTitle);
         txtGame = findViewById(R.id.txtGame);
         txtRound = findViewById(R.id.txtRound);
         txtProfit = findViewById(R.id.txtProfit);
-        txtWinPercentage = findViewById(R.id.txtWinPercentage);
+        txtUnit = findViewById(R.id.txtUnit);
         txtWin = findViewById(R.id.txtWin);
         txtLose = findViewById(R.id.txtLose);
         txtNextBet = findViewById(R.id.txtNextBet);
@@ -107,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
         profit = preferences.getString(PROFIT, "0");
         win = preferences.getInt(WIN, 0);
         lose = preferences.getInt(LOSE, 0);
+        stopLoss = preferences.getInt(STOP_LOSS, 0);
+        stopProfit = preferences.getInt(STOP_PROFIT, 0);
 
         baseBetAmount = Double.parseDouble(BaseUnitAmount);
 
@@ -116,8 +125,9 @@ public class MainActivity extends AppCompatActivity {
         txtWin.setText(String.valueOf(win));
         txtLose.setText(String.valueOf(lose));
 
-        double winPercentage = calculateWinPercentage(round, win);
-        txtWinPercentage.setText(String.valueOf(roundToOneDecimalPlace(winPercentage)));
+
+        double winPercentage = calculateProfitByUnit();
+        txtUnit.setText(String.valueOf(roundToOneDecimalPlace(winPercentage)));
 
 
         proceedToReset();
@@ -265,22 +275,17 @@ public class MainActivity extends AppCompatActivity {
         preferences.edit().putInt(Round, round).apply();
 
 
-        double winPercentage = calculateWinPercentage(round, win);
-        txtWinPercentage.setText(String.valueOf(roundToOneDecimalPlace(winPercentage)));
+        double winPercentage = calculateProfitByUnit();
+        txtUnit.setText(String.valueOf(roundToOneDecimalPlace(winPercentage)));
     }
 
-    public double calculateWinPercentage(int totalRounds, int winsCount) {
+    public double calculateProfitByUnit() {
 
-        if (totalRounds <= 0) {
+        double profit = Double.parseDouble(txtProfit.getText().toString());
+        if (profit <= 0) {
             return 0;
         }
-
-        if (winsCount < 0 || winsCount > totalRounds) {
-//            throw new IllegalArgumentException("Number of wins should be between 0 and total rounds.");
-            return 0;
-        }
-
-        return ((double) winsCount / totalRounds) * 100;
+        return roundToOneDecimalPlace(profit / baseBetAmount);
     }
 
     private void setDisableButtons(boolean b) {
@@ -393,7 +398,7 @@ public class MainActivity extends AppCompatActivity {
 
         } else if (mm.equals(MoneyManagement.MOON)) {
 
-            if(txtNextBet.getText().equals("{nextBet}")){
+            if (txtNextBet.getText().equals("{nextBet}")) {
                 txtNextBet.setText(String.valueOf(baseBetAmount));
             }
 
@@ -432,13 +437,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void Lose_Clicked(View view) {
-
         processEvent("l");
     }
 
 
     public void Win_CLicked(View view) {
-
 
         processEvent("w");
 
@@ -651,7 +654,13 @@ public class MainActivity extends AppCompatActivity {
 
         ListView listView = dialogView.findViewById(R.id.listView);
         TextView txtBaseUnit = dialogView.findViewById(R.id.txtBaseUnit);
+        txtStopLoss = dialogView.findViewById(R.id.txtStopLoss);
+        txtStopProfit = dialogView.findViewById(R.id.txtStopProfit);
+        StopPanel= dialogView.findViewById(R.id.StopPanel);
+        txtStopLoss.setText(String.valueOf(stopLoss));
+        txtStopProfit.setText(String.valueOf(stopProfit));
 
+        setStopVisiblity(selectedMM);
 
         txtBaseUnit.setText(String.valueOf(baseBetAmount));
 
@@ -670,6 +679,7 @@ public class MainActivity extends AppCompatActivity {
                 boolean clickedItemState = !moneyManagement.isSelected();
 
                 updateTheMoneyManagementList(moneyManagement.getFieldName());
+                setStopVisiblity(moneyManagement.getFieldName());
 
 
                 // For example, you can do something with the clicked item
@@ -699,6 +709,10 @@ public class MainActivity extends AppCompatActivity {
                         preferences.edit().putInt(WIN, 0).apply();
                         preferences.edit().putInt(LOSE, 0).apply();
 
+                        preferences.edit().putInt(STOP_LOSS, Integer.parseInt(txtStopLoss.getText().toString())).apply();
+                        preferences.edit().putInt(STOP_PROFIT, Integer.parseInt(txtStopProfit.getText().toString())).apply();
+
+
                         txtTitle.setText(selectedMM);
 //                        }
 
@@ -714,6 +728,16 @@ public class MainActivity extends AppCompatActivity {
 
         androidx.appcompat.app.AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private void setStopVisiblity(String mm) {
+        if (mm.equals(MoneyManagement.MOON)) {
+            StopPanel.setVisibility(View.VISIBLE);
+
+        } else {
+            StopPanel.setVisibility(View.INVISIBLE);
+
+        }
     }
 
 

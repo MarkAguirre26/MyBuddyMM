@@ -15,6 +15,9 @@ public class MoneyManagement {
     public static final String MOON = "Moon Grind";
     public static final String MOON_DESCRIPTION = "+1 unit if L, Stay to current unit if W";
 
+    public static final String Mang_B = "Mang B";
+    public static final String Mang_B_DESCRIPTION = "Stay to current unit if L, get the total of  L if W";
+
 
     private String fieldName;
     private String description;
@@ -70,9 +73,11 @@ public class MoneyManagement {
 
     public static List<MoneyManagement> getMoneyManagementList() {
         List<MoneyManagement> itemList = new ArrayList<>();
-        itemList.add(new MoneyManagement(MoneyManagement.ORC, MoneyManagement.ORC_DESCRIPTION, 12, false));
-        itemList.add(new MoneyManagement(MoneyManagement.OSCAR, MoneyManagement.OSCAR_DESCRIPTION, 40, false));
-        itemList.add(new MoneyManagement(MoneyManagement.MOON, MoneyManagement.MOON_DESCRIPTION, 40, false));
+        itemList.add(new MoneyManagement(MoneyManagement.ORC, MoneyManagement.ORC_DESCRIPTION, 0, false));
+        itemList.add(new MoneyManagement(MoneyManagement.OSCAR, MoneyManagement.OSCAR_DESCRIPTION, 0, false));
+        itemList.add(new MoneyManagement(MoneyManagement.MOON, MoneyManagement.MOON_DESCRIPTION, 0, false));
+        itemList.add(new MoneyManagement(MoneyManagement.Mang_B, MoneyManagement.Mang_B_DESCRIPTION, 0, false));
+
         return itemList;
     }
 
