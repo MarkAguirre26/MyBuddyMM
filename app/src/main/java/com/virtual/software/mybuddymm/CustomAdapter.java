@@ -13,9 +13,9 @@ import java.util.List;
 public class CustomAdapter extends BaseAdapter {
     private int selectedPosition = -1;
     private Context context;
-    private List<ListItemMoneymanagement> itemList;
+    private List<MoneyManagement> itemList;
 
-    public CustomAdapter(Context context, List<ListItemMoneymanagement> itemList) {
+    public CustomAdapter(Context context, List<MoneyManagement> itemList) {
         this.context = context;
         this.itemList = itemList;
     }
@@ -26,7 +26,7 @@ public class CustomAdapter extends BaseAdapter {
     }
 
     @Override
-    public ListItemMoneymanagement  getItem(int position) {
+    public MoneyManagement getItem(int position) {
 
         return itemList.get(position);
     }
@@ -48,7 +48,7 @@ public class CustomAdapter extends BaseAdapter {
         RadioButton radioButton  = convertView.findViewById(R.id.radioButton);
 
 
-        ListItemMoneymanagement currentItem = itemList.get(position);
+        MoneyManagement currentItem = itemList.get(position);
 
 //        radioButton.setChecked(position == selectedPosition);
         // Find the initially selected position (if any)

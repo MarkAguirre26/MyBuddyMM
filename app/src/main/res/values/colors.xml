@@ -4,6 +4,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#BCBCBC</color>
     <color name="green">#4BE0C4</color>
+    <color name="green_header">#33D6B7</color>
+    <color name="green_secondary">#1A7E6B</color>
     <color name="foreColor">#434343</color>
     <color name="disabled">#959595</color>
     <color name="Lose">#D12B2B</color>
