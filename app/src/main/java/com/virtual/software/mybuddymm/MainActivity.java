@@ -126,8 +126,8 @@ public class MainActivity extends AppCompatActivity {
         txtLose.setText(String.valueOf(lose));
 
 
-        double winPercentage = calculateProfitByUnit();
-        txtUnit.setText(String.valueOf(roundToOneDecimalPlace(winPercentage)));
+        double byUnit = calculateProfitByUnit();
+        txtUnit.setText(String.valueOf(roundToOneDecimalPlace(byUnit)));
 
 
         proceedToReset();
@@ -223,8 +223,47 @@ public class MainActivity extends AppCompatActivity {
                 String trimmedAmount = String.valueOf(roundToOneDecimalPlace(refinedLastBetAmount)).replace("-", "");
                 System.out.println(trimmedAmount);
                 double bet = Double.parseDouble(trimmedAmount) + baseBetAmount;
-                System.out.println(bet);
+
                 txtNextBet.setText(String.valueOf(roundToOneDecimalPlace(bet)));
+
+
+            }
+
+            createWinAndLossView();
+            setViewContentsForMoon();
+
+
+        }
+    }
+
+
+    private void MangB(String r) {
+
+
+        if (!isDisabled) {
+
+            winLoseList.add(r);
+            String lastResult = getLastString(winLoseList);
+
+            double totalProfit;
+
+            if (lastResult.equals("w")) {
+
+                betsList.add(Double.parseDouble(txtNextBet.getText().toString()));
+
+                totalProfit = sumDoubleList(betsList) + (baseBetAmount * 2);
+
+
+                String trimmedAmount = String.valueOf(roundToOneDecimalPlace(totalProfit));
+
+                txtNextBet.setText(trimmedAmount);
+
+            } else {
+
+                betsList.add(Double.parseDouble("-" + txtNextBet.getText()));
+
+                totalProfit = getLastDouble(betsList);
+                txtNextBet.setText(String.valueOf(roundToOneDecimalPlace(totalProfit)).replace("-", ""));
 
 
             }
@@ -236,6 +275,62 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private static double sumDoubleList(List<Double> doubleList) {
+        double sum = 0.0;
+        for (Double num : doubleList) {
+            sum += num;
+
+        }
+        return roundToOneDecimalPlace(Double.parseDouble(String.valueOf(sum).replace("-", "")));
+    }
+
+    private void setViewContentsForMoon() {
+
+        double unitOfBet = Double.parseDouble(txtNextBet.getText().toString()) / baseBetAmount;
+        int intValue = (int) Math.round(unitOfBet);
+        txtUnitOfBet.setText(String.valueOf(intValue));
+
+        double total = sumOfDoubles(betsList);
+
+
+        double currentProfit = roundToOneDecimalPlace((total / baseBetAmount));
+
+        if (currentProfit >= stopProfit) {
+
+            txtMessage.setText("Stop Profit hit " + roundToOneDecimalPlace(total) + " (" + stopProfit + ") ");
+            txtMessage.setTextColor(getColor(R.color.win));
+
+            setDisableButtons(true);
+
+            if (total != 0) {
+                win++;
+            }
+
+            String p = txtProfit.getText().toString();
+            double newProfit = (Double.parseDouble(p) + total);
+            preferences.edit().putString(PROFIT, String.valueOf(roundToOneDecimalPlace(newProfit))).apply();
+            txtProfit.setText(String.valueOf(roundToOneDecimalPlace(newProfit)));
+            preferences.edit().putInt(WIN, win).apply();
+            txtWin.setText(String.valueOf(win));
+
+
+        } else if (stopLoss <= Double.parseDouble(String.valueOf(currentProfit).replace("-", ""))) {
+
+//            setDisableButtons(true);
+            txtMessage.setText("Stop loss hit " + roundToOneDecimalPlace(total) + " (" + stopLoss + "), Please consider to press the reset button");
+            txtMessage.setTextColor(getColor(R.color.Lose));
+        }
+        game++;
+
+        txtGame.setText(String.valueOf(game));
+        txtRound.setText(String.valueOf(round));
+        preferences.edit().putInt(GAME, game).apply();
+        preferences.edit().putInt(Round, round).apply();
+
+
+        double winPercentage = calculateProfitByUnit();
+        txtUnit.setText(String.valueOf(roundToOneDecimalPlace(winPercentage)));
+    }
 
     private void setViewContents() {
 
@@ -281,7 +376,7 @@ public class MainActivity extends AppCompatActivity {
 
     public double calculateProfitByUnit() {
 
-        double profit = Double.parseDouble(txtProfit.getText().toString());
+        double profit = Double.parseDouble(txtProfit.getText().toString().replace("-",""));
         if (profit <= 0) {
             return 0;
         }
@@ -387,6 +482,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void SetupEachMoneyManagement(String mm) {
+
         if (mm.equals(MoneyManagement.ORC)) {
             String n = String.valueOf(OrcMoneyManagement.getBetAmount(currentPosition));
             if (n.equals("0.0")) {
@@ -398,11 +494,14 @@ public class MainActivity extends AppCompatActivity {
 
         } else if (mm.equals(MoneyManagement.MOON)) {
 
-            if (txtNextBet.getText().equals("{nextBet}")) {
-                txtNextBet.setText(String.valueOf(baseBetAmount));
-            }
-
+            txtNextBet.setText(String.valueOf(baseBetAmount));
             updateTheMoneyManagementList(MoneyManagement.MOON);
+
+        } else if (mm.equals(MoneyManagement.Mang_B)) {
+
+            txtNextBet.setText(String.valueOf(baseBetAmount));
+            updateTheMoneyManagementList(MoneyManagement.Mang_B);
+
         } else {
             //Oscar'sGrind is the Default MM
             txtNextBet.setText(String.valueOf(baseBetAmount));
@@ -465,6 +564,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case MoneyManagement.MOON:
                     MoonGrind(r);
+                    break;
+                case MoneyManagement.Mang_B:
+                    MangB(r);
                     break;
 
                 default:
@@ -656,7 +758,8 @@ public class MainActivity extends AppCompatActivity {
         TextView txtBaseUnit = dialogView.findViewById(R.id.txtBaseUnit);
         txtStopLoss = dialogView.findViewById(R.id.txtStopLoss);
         txtStopProfit = dialogView.findViewById(R.id.txtStopProfit);
-        StopPanel= dialogView.findViewById(R.id.StopPanel);
+        StopPanel = dialogView.findViewById(R.id.StopPanel);
+
         txtStopLoss.setText(String.valueOf(stopLoss));
         txtStopProfit.setText(String.valueOf(stopProfit));
 
@@ -700,6 +803,8 @@ public class MainActivity extends AppCompatActivity {
                         txtNextBet.setText(String.valueOf(baseBetAmount));
 
                         selectedMM = GetMoneyManagementByStatus();
+                        stopLoss = Integer.parseInt(txtStopLoss.getText().toString());
+                        stopProfit = Integer.parseInt(txtStopProfit.getText().toString());
 
                         preferences.edit().putString(BASE_UNIT, String.valueOf(baseBetAmount)).apply();
                         preferences.edit().putString(MONEY_MANAGEMENT, selectedMM).apply();
@@ -709,8 +814,8 @@ public class MainActivity extends AppCompatActivity {
                         preferences.edit().putInt(WIN, 0).apply();
                         preferences.edit().putInt(LOSE, 0).apply();
 
-                        preferences.edit().putInt(STOP_LOSS, Integer.parseInt(txtStopLoss.getText().toString())).apply();
-                        preferences.edit().putInt(STOP_PROFIT, Integer.parseInt(txtStopProfit.getText().toString())).apply();
+                        preferences.edit().putInt(STOP_LOSS, stopLoss).apply();
+                        preferences.edit().putInt(STOP_PROFIT, stopProfit).apply();
 
 
                         txtTitle.setText(selectedMM);
