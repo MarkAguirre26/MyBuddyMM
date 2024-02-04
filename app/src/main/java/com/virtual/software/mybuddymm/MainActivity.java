@@ -376,7 +376,7 @@ public class MainActivity extends AppCompatActivity {
 
     public double calculateProfitByUnit() {
 
-        double profit = Double.parseDouble(txtProfit.getText().toString().replace("-",""));
+        double profit = Double.parseDouble(txtProfit.getText().toString().replace("-", ""));
         if (profit <= 0) {
             return 0;
         }
@@ -729,6 +729,8 @@ public class MainActivity extends AppCompatActivity {
         txtProfit.setText("0");
         txtWin.setText(String.valueOf(win));
         txtLose.setText(String.valueOf(lose));
+        txtUnit.setText("0");
+
         proceedToReset();
 
         Toast.makeText(this, "Done force reset", Toast.LENGTH_SHORT).show();
